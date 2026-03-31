@@ -3,7 +3,6 @@ package com.github.divyuuu.geolocation.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Time;
 import java.util.UUID;
 
 @Getter
@@ -22,6 +21,6 @@ public class Ride {
     private String destination;
     private String rideType;
     private Double distance;
-    private Double fare;
-    private Time time;
+    private Double totalFare;
+    private Integer time;
 }

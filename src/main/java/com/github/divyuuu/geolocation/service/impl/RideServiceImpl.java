@@ -7,6 +7,6 @@ import com.github.divyuuu.geolocation.service.RideService;
 public class RideServiceImpl implements RideService {
     @Override
     public RideResponseDto bookRide(RideRequestDto rideReqDto) {
-        return null;
+        
     }
 }
