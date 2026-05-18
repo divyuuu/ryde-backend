@@ -1,17 +1,19 @@
 package com.github.divyuuu.geolocation.controller;
 
 import com.github.divyuuu.geolocation.dto.LoginRequestDto;
-import com.github.divyuuu.geolocation.dto.SignupRequestDto;
+import com.github.divyuuu.geolocation.dto.SignUpRequestDto;
 import com.github.divyuuu.geolocation.model.User;
 import com.github.divyuuu.geolocation.service.AuthenticationService;
 import com.github.divyuuu.geolocation.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationRestController {
@@ -21,31 +23,30 @@ public class AuthenticationRestController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody LoginRequestDto request) throws SQLException {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto request) throws SQLException {
+        Boolean isValid = authenticationService.login(request);
 
-        User user = userService.findUser(request.getEmail());
-
-        if (user == null) {
-            return ResponseEntity.status(404).body(false);
+        if(!isValid){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error",
+                    "Invalid Email or Password"));
         }
-
-        boolean isValid = user.getPassword().equals(request.getPassword());
-
-        return ResponseEntity.ok(isValid);
+        return ResponseEntity.ok(Map.of("success", "succesfully logged in"));
     }
 
     @PostMapping("/signup")
-    public String signup(@RequestBody SignupRequestDto request) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequestDto request) throws SQLException {
+        String email = request.getEmail();
+        if(email == null || email.equals("")){
+            return ResponseEntity.badRequest().body("Invalid Email " + email);
+        }
+        User user = userService.findUser(email);
 
-        User user = new User();
+        if(user != null){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "User with email " + email + " already exists."));
+        }
 
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setRole(request.getRole());
-        user.setRating(0.0);
-        user.setTotalRides(0);
-        authenticationService.signup(user);
-        return "sign up done";
+        authenticationService.signup(request);
+
+        return ResponseEntity.ok(Map.of("success", "User Created Succesfully"));
     }
 }

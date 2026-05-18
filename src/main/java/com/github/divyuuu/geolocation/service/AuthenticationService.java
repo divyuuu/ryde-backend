@@ -1,9 +1,12 @@
 package com.github.divyuuu.geolocation.service;
 
-import com.github.divyuuu.geolocation.dto.SignupRequestDto;
-import com.github.divyuuu.geolocation.model.User;
 
+import com.github.divyuuu.geolocation.dto.LoginRequestDto;
+import com.github.divyuuu.geolocation.dto.SignUpRequestDto;
+
+import java.sql.SQLException;
 
 public interface AuthenticationService {
-    public String signup(User user);
+    public void signup(SignUpRequestDto request);
+    public Boolean login(LoginRequestDto request) throws SQLException;
 }
