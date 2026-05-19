@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
@@ -45,13 +46,13 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     }
 
     @Override
-    public Boolean login(LoginRequestDto request) throws SQLException {
+    public Optional<User> login(LoginRequestDto request) throws SQLException {
         User user = userService.findUser(request.getEmail());
 
-        if(user == null){
-            throw new RuntimeException("No user find with email " + request.getEmail());
+        if(user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())){
+            return Optional.of(user);
         }
 
-        return passwordEncoder.matches(request.getPassword(), user.getPassword());
+        return Optional.empty();
     }
 }

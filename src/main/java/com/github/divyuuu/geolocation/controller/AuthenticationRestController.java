@@ -2,6 +2,7 @@ package com.github.divyuuu.geolocation.controller;
 
 import com.github.divyuuu.geolocation.dto.LoginRequestDto;
 import com.github.divyuuu.geolocation.dto.SignUpRequestDto;
+import com.github.divyuuu.geolocation.dto.UserResponseDto;
 import com.github.divyuuu.geolocation.model.User;
 import com.github.divyuuu.geolocation.service.AuthenticationService;
 import com.github.divyuuu.geolocation.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -24,13 +26,15 @@ public class AuthenticationRestController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto request) throws SQLException {
-        Boolean isValid = authenticationService.login(request);
+        Optional<User> optUser = authenticationService.login(request);
 
-        if(!isValid){
+        if(optUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error",
                     "Invalid Email or Password"));
         }
-        return ResponseEntity.ok(Map.of("success", "succesfully logged in"));
+        User user = optUser.get();
+        UserResponseDto urd = userService.getUserDto(user);
+        return ResponseEntity.ok(Map.of("success", urd));
     }
 
     @PostMapping("/signup")
