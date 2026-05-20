@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/ride")
+@RequestMapping("/api/rides")
 public class RideRestController {
     @Autowired
     RideService rideService;
