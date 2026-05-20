@@ -5,6 +5,7 @@ import com.github.divyuuu.geolocation.dto.SignUpRequestDto;
 import com.github.divyuuu.geolocation.dto.UserResponseDto;
 import com.github.divyuuu.geolocation.model.User;
 import com.github.divyuuu.geolocation.service.AuthenticationService;
+import com.github.divyuuu.geolocation.service.JwtService;
 import com.github.divyuuu.geolocation.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class AuthenticationRestController {
     AuthenticationService authenticationService;
     @Autowired
     UserService userService;
+    @Autowired
+    JwtService jwtService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto request) throws SQLException {
@@ -34,7 +37,14 @@ public class AuthenticationRestController {
         }
         User user = optUser.get();
         UserResponseDto urd = userService.getUserDto(user);
-        return ResponseEntity.ok(Map.of("success", urd));
+        String token = jwtService.generateToken(user.getEmail());
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "token", token,
+                        "user", urd
+                )
+        );
     }
 
     @PostMapping("/signup")
