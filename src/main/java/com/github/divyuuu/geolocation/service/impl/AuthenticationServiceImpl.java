@@ -3,6 +3,9 @@ package com.github.divyuuu.geolocation.service.impl;
 
 import com.github.divyuuu.geolocation.dto.LoginRequestDto;
 import com.github.divyuuu.geolocation.dto.SignUpRequestDto;
+import com.github.divyuuu.geolocation.model.Driver;
+import com.github.divyuuu.geolocation.model.Passenger;
+import com.github.divyuuu.geolocation.model.Role;
 import com.github.divyuuu.geolocation.model.User;
 import com.github.divyuuu.geolocation.repository.UserRepository;
 import com.github.divyuuu.geolocation.service.UserService;
@@ -38,11 +41,22 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         newUser.setPassword(encryptedPassword);
 
         newUser.setRole(request.getRole());
+
+        if(newUser.getRole() == Role.DRIVER){
+            Driver driver = new Driver();
+            driver.setUser(newUser);
+            newUser.setDriver(driver);
+        }
+        else if(newUser.getRole() == Role.PASSENGER){
+            Passenger passenger = new Passenger();
+            passenger.setUser(newUser);
+            newUser.setPassenger(passenger);
+        }
+
         newUser.setRating(0.0);
         newUser.setTotalRides(0);
 
         userRepository.save(newUser);
-
     }
 
     @Override
