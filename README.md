@@ -131,4 +131,4 @@ Store under `docs/screenshots/` in **this** repo if you want API docs visuals:
 
 ## License
 
-Add your license here (e.g. MIT).
+All rights owned by @divyuuu
