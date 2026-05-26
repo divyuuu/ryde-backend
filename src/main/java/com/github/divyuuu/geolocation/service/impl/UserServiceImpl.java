@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
         urd.setEmail(user.getEmail());
         urd.setRating(user.getRating());
         urd.setTotalRides(user.getTotalRides());
+        urd.setRole(user.getRole());
 
         return urd;
     }

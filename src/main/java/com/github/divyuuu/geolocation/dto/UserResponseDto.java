@@ -1,5 +1,6 @@
 package com.github.divyuuu.geolocation.dto;
 
+import com.github.divyuuu.geolocation.model.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,4 +16,5 @@ public class UserResponseDto {
     private String name;
     private Double rating;
     private Integer totalRides;
+    private Role role;
 }
