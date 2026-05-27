@@ -27,4 +27,7 @@ public class Driver {
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
     private User user;
+
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    private Car car;
 }
