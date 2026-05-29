@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -18,9 +19,7 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Setter(AccessLevel.NONE)
     private UUID uuid;
-
-    private String vehicleNumber;
-    private String vehicleModel;
+    
     private String licenseNumber;
     private Boolean available;
 
@@ -29,5 +28,5 @@ public class Driver {
     private User user;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
-    private Car car;
+    private List<Car> cars;
 }

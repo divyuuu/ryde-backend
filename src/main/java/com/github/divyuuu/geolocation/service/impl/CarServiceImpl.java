@@ -6,10 +6,12 @@ import com.github.divyuuu.geolocation.model.Driver;
 import com.github.divyuuu.geolocation.model.User;
 import com.github.divyuuu.geolocation.repository.CarRepository;
 import com.github.divyuuu.geolocation.service.CarService;
+import com.github.divyuuu.geolocation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,8 +23,12 @@ public class CarServiceImpl implements CarService {
     @Autowired
     DriverServiceImpl driverService;
 
+    @Autowired
+    UserService userService;
+
     public void create(CarRequestDto req) {
-        Driver driver = driverService.find(req.getDriverId());
+        User user = userService.find(req.getDriverId());
+        Driver driver = driverService.findByUser(user);
 
         if(driver == null){
             throw new RuntimeException("Driver not found for driver id: "+ req.getDriverId());
@@ -34,6 +40,10 @@ public class CarServiceImpl implements CarService {
                 .driver(driver)
                 .build();
 
-        driver.setCar(car);
+        List<Car> cars = List.of(car);
+
+        driver.setCars(cars);
+
+        carRepository.save(car);
     }
 }

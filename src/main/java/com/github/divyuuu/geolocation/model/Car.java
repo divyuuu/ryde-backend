@@ -17,7 +17,7 @@ public class Car {
     private UUID id;
     private String brand;
     private String model;
-    private Double costPerKm;
+        private Double costPerKm;
     private Boolean available;
     @ManyToOne
     @JoinColumn(name = "driver", unique = true)

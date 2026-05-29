@@ -1,6 +1,7 @@
 package com.github.divyuuu.geolocation.service.impl;
 
 import com.github.divyuuu.geolocation.model.Driver;
+import com.github.divyuuu.geolocation.model.User;
 import com.github.divyuuu.geolocation.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,4 +18,5 @@ public class DriverServiceImpl {
         return driverRepository.findById(uuid).orElse(null);
     }
 
+    public Driver findByUser(User user){ return driverRepository.findByUser(user).orElse(null); }
 }
