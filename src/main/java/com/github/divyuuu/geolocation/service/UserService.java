@@ -7,7 +7,7 @@ import java.util.UUID;
 
 
 public interface UserService{
-    public User findUser(String email) throws SQLException ;
+    public User findUser(String email);
     public UserResponseDto getUserDto(User user);
-    public User find(UUID uuid) throws SQLException;
+    public User find(UUID uuid);
 }

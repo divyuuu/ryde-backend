@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public User findUser(String email) throws SQLException {
+    public User findUser(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
         return user;
     }
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User find(UUID uuid) throws SQLException{
+    public User find(UUID uuid) {
         User user = userRepository.findById(uuid).orElse(null);
 
         return user;
