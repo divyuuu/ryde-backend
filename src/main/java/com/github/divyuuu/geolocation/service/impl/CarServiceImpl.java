@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -27,11 +29,11 @@ public class CarServiceImpl implements CarService {
     UserService userService;
 
     public void create(CarRequestDto req) {
-        User user = userService.find(req.getDriverId());
+        User user = userService.find(req.getUserId());
         Driver driver = driverService.findByUser(user);
 
         if(driver == null){
-            throw new RuntimeException("Driver not found for driver id: "+ req.getDriverId());
+            throw new RuntimeException("Driver not found for driver id: "+ req.getUserId());
         }
         Car car = Car.builder()
                 .model(req.getModel())
@@ -40,10 +42,24 @@ public class CarServiceImpl implements CarService {
                 .driver(driver)
                 .build();
 
-        List<Car> cars = List.of(car);
-
-        driver.setCars(cars);
-
         carRepository.save(car);
+    }
+
+    @Override
+    public List<Car> findAll(UUID userId) {
+        User user = userService.find(userId);
+        if (user == null){
+            throw new IllegalArgumentException("No user found for User id: "+ userId);
+        }
+
+        UUID driverId = user.getDriver().getUuid();
+        if(driverId == null){
+            throw new IllegalArgumentException("No driver found for user id: " + userId);
+        }
+
+        Driver driver = driverService.find(driverId);
+        List<Car> cars = carRepository.findAllByDriver(driver);
+
+        return cars;
     }
 }

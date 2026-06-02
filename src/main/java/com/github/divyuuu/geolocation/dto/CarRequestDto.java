@@ -19,5 +19,5 @@ public class CarRequestDto {
     @NotNull(message = "car cost per km is required")
     private Double costPerKm;
     @NotNull(message = "driver id is needed to add a car")
-    private UUID driverId;
+    private UUID userId;
 }
